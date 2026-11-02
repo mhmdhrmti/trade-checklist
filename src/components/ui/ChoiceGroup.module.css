@@ -1,0 +1,96 @@
+.group {
+  display: grid;
+  grid-template-columns: repeat(var(--columns, 3), minmax(0, 1fr));
+  gap: 8px;
+}
+
+.option {
+  position: relative;
+  display: block;
+}
+
+/* The real radio sits invisibly over the chip so the whole chip is clickable and keyboard-focusable. */
+.input {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.face {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-block-size: 48px;
+  padding: 8px 6px;
+  text-align: center;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.35;
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.08s ease;
+}
+
+.hint {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: var(--muted);
+  direction: ltr;
+}
+
+.option[data-tone='positive'] .face {
+  color: var(--positive);
+}
+
+.option[data-tone='negative'] .face {
+  color: var(--negative);
+}
+
+.input:checked + .face {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.option[data-tone='positive'] .input:checked + .face {
+  background: var(--positive);
+  border-color: var(--positive);
+  color: #fff;
+}
+
+.option[data-tone='negative'] .input:checked + .face {
+  background: var(--negative);
+  border-color: var(--negative);
+  color: #fff;
+}
+
+.input:checked + .face .hint {
+  color: inherit;
+  opacity: 0.85;
+}
+
+.input:active + .face {
+  transform: scale(0.97);
+}
+
+.input:focus-visible + .face {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.group[data-invalid] .input:not(:checked) + .face {
+  border-color: var(--negative);
+}
+
+@media (hover: hover) {
+  .input:not(:checked):hover + .face {
+    border-color: var(--accent);
+  }
+}

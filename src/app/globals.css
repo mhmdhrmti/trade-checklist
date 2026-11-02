@@ -1,0 +1,117 @@
+/* Design tokens — minimal palette carried over from the original journal (indigo accent, emerald / red outcomes). */
+:root {
+  color-scheme: light dark;
+
+  --bg: #f5f6fb;
+  --surface: #ffffff;
+  --surface-2: #eef0f8;
+  --text: #141a33;
+  --muted: #66708f;
+  --line: #e1e5f0;
+
+  --accent: #4f5bd5;
+  --accent-contrast: #ffffff;
+  --accent-soft: rgb(79 91 213 / 0.12);
+
+  --positive: #0f9f77;
+  --positive-soft: rgb(15 159 119 / 0.12);
+  --negative: #d94a53;
+  --negative-soft: rgb(217 74 83 / 0.12);
+
+  --radius: 14px;
+  --shadow: 0 1px 2px rgb(20 26 51 / 0.04), 0 8px 24px rgb(20 26 51 / 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0d1222;
+    --surface: #151c33;
+    --surface-2: #1c2542;
+    --text: #e8ecf8;
+    --muted: #98a3c3;
+    --line: #263050;
+
+    --accent: #8c97ff;
+    --accent-contrast: #0d1222;
+    --accent-soft: rgb(140 151 255 / 0.16);
+
+    --positive: #2fd39b;
+    --negative: #ff7b84;
+    --positive-soft: rgb(47 211 155 / 0.14);
+    --negative-soft: rgb(255 123 132 / 0.14);
+
+    --shadow: 0 8px 24px rgb(0 0 0 / 0.3);
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-block-size: 100dvh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Vazirmatn Variable', Vazirmatn, Tahoma, system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  /* Respect notches / home indicator when installed as a PWA. */
+  padding-inline: env(safe-area-inset-left) env(safe-area-inset-right);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Shared look for text-like controls (date button, time, select, R input, notes). */
+.control {
+  inline-size: 100%;
+  min-block-size: 48px;
+  padding: 8px 12px;
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  /* 16px minimum stops iOS from zooming the page on focus. */
+  font-size: 1rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.control:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.control[aria-invalid='true'] {
+  border-color: var(--negative);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
