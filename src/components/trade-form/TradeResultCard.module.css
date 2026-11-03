@@ -1,0 +1,28 @@
+/* Controls on top, notes absorb every leftover pixel so the card always matches its neighbours' height. */
+.body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 18px;
+  min-block-size: 0;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-inline-size: 0;
+}
+
+/* Tablet: result card is full-width, so controls and notes sit side by side. */
+@media (min-width: 768px) and (max-width: 1179px) {
+  .body {
+    flex-direction: row;
+    gap: 24px;
+  }
+
+  .controls,
+  .body > :last-child {
+    flex: 1 1 0;
+  }
+}

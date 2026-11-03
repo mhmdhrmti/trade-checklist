@@ -31,12 +31,15 @@ const API_ERROR_MESSAGES: Record<ApiErrorCode, string> = {
 
 const OFFLINE_MESSAGE = 'اتصال اینترنت برقرار نیست. اطلاعات فرم حفظ شده؛ بعد از وصل شدن دوباره بزن «ثبت».';
 
+/** Pre-selected so the dashboard never starts with an empty checklist slot. */
+const DEFAULT_SETUP: SetupId = 'SP2L';
+
 export function createDraft(utcOffset: number = DEFAULT_UTC_OFFSET, now: Date = new Date()): TradeDraft {
   return {
     ...nowInOffset(utcOffset, now),
     utcOffset,
     symbol: null,
-    setup: null,
+    setup: DEFAULT_SETUP,
     checklist: [],
     session: null,
     timeWindow: null,

@@ -1,6 +1,13 @@
-.sticky {
-  position: sticky;
-  inset-block-start: 88px;
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-inline-size: 0;
+  margin-block-start: auto;
+  padding: 16px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 16px;
 }
 
 .progressRow {
@@ -48,12 +55,12 @@
   border-radius: 999px;
 }
 
-.chip[data-tone='positive'] {
+.chip[data-tone="positive"] {
   color: var(--positive);
   background: var(--positive-soft);
 }
 
-.chip[data-tone='negative'] {
+.chip[data-tone="negative"] {
   color: var(--negative);
   background: var(--negative-soft);
 }
@@ -73,11 +80,6 @@
 @media (min-width: 1180px) {
   .desktopSubmit {
     display: block;
-  }
-}
-
-@media (max-width: 1179px) {
-  .sticky {
-    position: static;
+    margin-block-start: 2px;
   }
 }

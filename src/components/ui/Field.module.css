@@ -36,3 +36,12 @@
   font-weight: 600;
   color: var(--negative);
 }
+
+.field[data-grow] {
+  flex: 1;
+}
+
+.field[data-grow] > textarea {
+  flex: 1;
+  min-block-size: 96px;
+}

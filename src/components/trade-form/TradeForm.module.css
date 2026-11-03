@@ -4,7 +4,13 @@
   gap: 16px;
 }
 
-/* Mobile: one column. Tablet: two columns. Desktop: three columns + clock hero across the top. */
+/*
+ * Dashboard grid. Every cell is a stretch wrapper around a growing Card, so cards in the same row
+ * (and columns spanning rows) always end at the same height.
+ *  mobile  : one column  — date · market · setup · result
+ *  tablet  : two columns — [date | market] / [setup | result]
+ *  desktop : three cols  — [date, market] stacked | setup (tall) | result (tall, left side)
+ */
 .dashboard {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -12,10 +18,12 @@
   align-items: stretch;
 }
 
-.column {
+.dateSymbol,
+.market,
+.setup,
+.result {
   display: flex;
   flex-direction: column;
-  gap: 16px;
   min-inline-size: 0;
 }
 
@@ -29,7 +37,11 @@
   padding: 22px;
   color: #fff;
   background:
-    radial-gradient(520px 260px at 100% 0%, rgb(255 255 255 / 0.18), transparent 70%),
+    radial-gradient(
+      520px 260px at 100% 0%,
+      rgb(255 255 255 / 0.18),
+      transparent 70%
+    ),
     linear-gradient(135deg, #4f5bd5 0%, #7c5cf0 55%, #9b6bff 100%);
   border-radius: var(--radius-lg);
   box-shadow: 0 18px 44px rgb(99 102 241 / 0.3);
@@ -52,40 +64,48 @@
   gap: 12px;
 }
 
+/* Tablet: [date + market stacked | setup] with the result full-width below; heights match per row. */
 @media (min-width: 768px) {
   .dashboard {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      "hero hero"
+      "dateSymbol setup"
+      "market setup"
+      "result result";
     gap: 20px;
-  }
-
-  .column:last-child {
-    grid-column: 1 / -1;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px;
-    align-items: start;
   }
 
   .hero {
     padding: 26px 30px;
   }
+
+  .zone {
+    flex-basis: 100%;
+  }
 }
 
+/* Desktop: date/market stacked | setup (tall) | result (tall, left side). */
 @media (min-width: 1180px) {
   .dashboard {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-areas:
+      "hero hero hero"
+      "dateSymbol setup result"
+      "market setup result";
   }
 
-  .column:last-child {
-    grid-column: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  .zone {
+    flex-basis: 360px;
   }
+}
 
-  .column {
-    gap: 20px;
-  }
+@media (min-width: 768px) {
+  .hero { grid-area: hero; }
+  .dateSymbol { grid-area: dateSymbol; }
+  .market { grid-area: market; }
+  .setup { grid-area: setup; }
+  .result { grid-area: result; }
 }
 
 @media (max-width: 420px) {

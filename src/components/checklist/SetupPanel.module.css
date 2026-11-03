@@ -1,0 +1,21 @@
+.divider {
+  inline-size: 100%;
+  margin: 0;
+  border: 0;
+  border-block-start: 1px solid var(--line);
+}
+
+/* Shown only when no setup is selected; fills the card so it never looks half-empty. */
+.empty {
+  display: grid;
+  flex: 1;
+  place-items: center;
+  margin: 0;
+  padding: 24px;
+  font-size: 0.875rem;
+  color: var(--muted);
+  text-align: center;
+  background: var(--bg);
+  border: 1.5px dashed var(--line);
+  border-radius: 12px;
+}

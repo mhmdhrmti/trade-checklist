@@ -27,10 +27,10 @@ describe('createDraft', () => {
 });
 
 describe('validateDraft', () => {
-  it('requires every field except notes', () => {
+  it('requires every field except notes (setup defaults to SP2L)', () => {
     const errors = validateDraft(createDraft(180, NOW));
     expect(Object.keys(errors).sort()).toEqual(
-      ['cycle', 'direction', 'outcome', 'session', 'setup', 'symbol', 'timeWindow'].sort(),
+      ['cycle', 'direction', 'outcome', 'session', 'symbol', 'timeWindow'].sort(),
     );
   });
 

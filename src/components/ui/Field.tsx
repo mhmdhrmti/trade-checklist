@@ -10,13 +10,15 @@ interface FieldProps {
   optional?: boolean;
   error?: string;
   hint?: ReactNode;
+  /** Lets the control fill the remaining height of a stretched card. */
+  grow?: boolean;
   children: ReactNode;
 }
 
 export const labelId = (id: string) => `${id}-label`;
 
 /** Label + control + error message. Every field in the form goes through this wrapper. */
-export function Field({ id, label, htmlFor, optional, error, hint, children }: FieldProps) {
+export function Field({ id, label, htmlFor, optional, error, hint, grow, children }: FieldProps) {
   const content = (
     <>
       {label}
@@ -25,7 +27,7 @@ export function Field({ id, label, htmlFor, optional, error, hint, children }: F
   );
 
   return (
-    <div className={styles.field} id={`field-${id}`}>
+    <div className={styles.field} id={`field-${id}`} data-grow={grow || undefined}>
       {htmlFor ? (
         <label className={styles.label} id={labelId(id)} htmlFor={htmlFor}>
           {content}

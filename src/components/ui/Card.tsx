@@ -8,12 +8,14 @@ interface CardProps {
   /** Small element on the opposite side of the title (e.g. a progress badge). */
   aside?: ReactNode;
   id?: string;
+  /** Stretches the card to fill leftover height of its column (keeps columns equal height). */
+  grow?: boolean;
   children: ReactNode;
 }
 
-export function Card({ title, icon, aside, id, children }: CardProps) {
+export function Card({ title, icon, aside, id, grow, children }: CardProps) {
   return (
-    <section className={styles.card} id={id}>
+    <section className={styles.card} id={id} data-grow={grow || undefined}>
       {(title || aside) && (
         <header className={styles.header}>
           {icon && <span className={styles.icon}>{icon}</span>}

@@ -11,7 +11,7 @@ interface NotesFieldProps {
 export function NotesField({ value, onChange }: NotesFieldProps) {
   const textareaId = useId();
   return (
-    <Field id="notes" label="یادداشت معامله" htmlFor={textareaId} optional>
+    <Field id="notes" label="یادداشت معامله" htmlFor={textareaId} optional grow>
       <textarea
         id={textareaId}
         className="control"

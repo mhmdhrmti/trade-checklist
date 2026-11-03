@@ -35,3 +35,7 @@
 .aside {
   margin-inline-start: auto;
 }
+
+.card[data-grow] {
+  flex: 1;
+}
