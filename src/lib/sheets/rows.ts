@@ -2,6 +2,7 @@ import { getChecklist } from '@/config/checklists';
 import { MAX_TP_ENTRIES, type SetupId } from '@/config/options';
 import type { TradePayload } from '@/types/trade';
 import { formatOffset, toUtc } from '../time';
+import { windowLabelAt } from '../timeWindows';
 
 export type Cell = string | number;
 
@@ -16,6 +17,7 @@ const LEADING_HEADERS = [
   'Setup',
   'Session',
   'Time Window',
+  'Time Window (UTC+3)',
   'Cycle',
   'Direction',
   'Outcome',
@@ -55,6 +57,7 @@ export function buildRow(payload: TradePayload, now: Date = new Date()): Cell[] 
     asText(payload.symbol),
     asText(payload.setup),
     asText(payload.session),
+    asText(windowLabelAt(payload.timeWindow, payload.utcOffsetMinutes)),
     asText(payload.timeWindow),
     asText(payload.cycle),
     asText(payload.direction),

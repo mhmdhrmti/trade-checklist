@@ -27,9 +27,9 @@
   justify-content: center;
   gap: 2px;
   min-block-size: 48px;
-  padding: 8px 6px;
+  padding: 8px 4px;
   text-align: center;
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   font-weight: 600;
   line-height: 1.35;
   background: var(--surface);

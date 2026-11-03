@@ -1,0 +1,58 @@
+.row {
+  display: flex;
+  gap: 8px;
+}
+
+.now {
+  flex: none;
+  padding-inline: 14px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 0;
+  border-radius: 12px;
+}
+
+.box {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 0;
+  padding-inline: 8px;
+}
+
+.box:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.box[data-invalid] {
+  border-color: var(--negative);
+}
+
+.part {
+  inline-size: 2.4ch;
+  min-inline-size: 0;
+  padding: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  background: none;
+  border: 0;
+  outline: none;
+}
+
+.part::placeholder {
+  font-weight: 500;
+  color: var(--muted);
+  opacity: 0.6;
+}
+
+.colon {
+  padding-inline: 2px;
+  font-weight: 700;
+  color: var(--muted);
+}

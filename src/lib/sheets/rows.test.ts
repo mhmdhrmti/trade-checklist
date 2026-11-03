@@ -21,6 +21,13 @@ const payload = (overrides: Partial<TradePayload> = {}): TradePayload => ({
 });
 
 describe('sheet rows', () => {
+  it('writes the window as read on the chosen clock plus the UTC+3 original', () => {
+    const headers = buildHeaders('SP2L');
+    const row = buildRow(payload({ setup: 'SP2L', utcOffsetMinutes: 0, timeWindow: '13–15:30', checklist: [] }));
+    expect(row[headers.indexOf('Time Window')]).toBe("'10–12:30");
+    expect(row[headers.indexOf('Time Window (UTC+3)')]).toBe("'13–15:30");
+  });
+
   it('keeps headers and rows the same width for every setup', () => {
     for (const setup of SETUP_VALUES) {
       expect(buildRow(payload({ setup, checklist: [] })).length).toBe(buildHeaders(setup).length);
@@ -28,7 +35,7 @@ describe('sheet rows', () => {
   });
 
   it('uses one checklist column per item', () => {
-    expect(buildHeaders('MicroMap').slice(14, 17)).toEqual(['Valid SP2L Leg', 'EMA Confirmation', 'With the Trend']);
+    expect(buildHeaders('MicroMap').slice(15, 18)).toEqual(['Valid SP2L Leg', 'EMA Confirmation', 'With the Trend']);
     expect(buildHeaders('SP2L')).toContain('Follow-through Candle');
   });
 
@@ -42,6 +49,7 @@ describe('sheet rows', () => {
     expect(cell('TP1 (R)')).toBe(1.5);
     expect(cell('TP2 (R)')).toBe(3);
     expect(cell('TP3 (R)')).toBe('');
+    expect(cell('Time Window')).toBe("'16:30–18"); // leading ' keeps Sheets from re-parsing it; Sheets strips it
     expect(cell('Valid SP2L Leg')).toBe('✓');
     expect(cell('EMA Confirmation')).toBe('✗');
     expect(cell('Logged At (UTC)')).toBe('2026-11-03 05:06:07');

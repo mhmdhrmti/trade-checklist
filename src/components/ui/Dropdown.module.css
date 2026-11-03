@@ -1,0 +1,66 @@
+.root {
+  position: relative;
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-weight: 600;
+  text-align: start;
+}
+
+.chevron {
+  flex: none;
+  color: var(--muted);
+  transition: transform 0.15s ease;
+}
+
+.chevron[data-open] {
+  transform: rotate(180deg);
+}
+
+/* Anchored to the trigger itself, so it always opens right beneath it at the same width. */
+.list {
+  position: absolute;
+  inset-block-start: calc(100% + 6px);
+  inset-inline: 0;
+  z-index: 40;
+  max-block-size: min(320px, 50dvh);
+  margin: 0;
+  padding: 6px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  list-style: none;
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  box-shadow: 0 18px 44px rgb(0 0 0 / 0.22);
+  outline: none;
+  animation: drop 0.12s ease-out;
+}
+
+.option {
+  padding: 10px 12px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+.option[data-active] {
+  background: var(--accent-soft);
+}
+
+.option[aria-selected='true'] {
+  font-weight: 700;
+  color: var(--accent);
+}
+
+@keyframes drop {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}

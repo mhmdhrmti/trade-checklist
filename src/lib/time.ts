@@ -71,3 +71,21 @@ export function toUtc(date: string, time: string, offsetMinutes: number): { date
     time: `${pad(utc.getUTCHours())}:${pad(utc.getUTCMinutes())}`,
   };
 }
+
+const weekdayFormat = new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone: 'UTC' });
+
+/** Everything a clock face needs, for a clock set to `offsetMinutes` (and the matching UTC reading). */
+export function clockParts(offsetMinutes: number, now: Date = new Date()) {
+  const shifted = new Date(now.getTime() + offsetMinutes * 60_000);
+  const hms = (d: Date) => `${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}:${pad(d.getUTCSeconds())}`;
+  return {
+    date: `${shifted.getUTCFullYear()}-${pad(shifted.getUTCMonth() + 1)}-${pad(shifted.getUTCDate())}`,
+    time: hms(shifted),
+    weekday: weekdayFormat.format(shifted),
+    utcTime: hms(now),
+  };
+}
+
+/** Label of an offset including its city hint, e.g. `UTC+3 · Istanbul`. */
+export const offsetLabel = (minutes: number): string =>
+  UTC_OFFSET_OPTIONS.find((o) => o.value === minutes)?.label ?? formatOffset(minutes);

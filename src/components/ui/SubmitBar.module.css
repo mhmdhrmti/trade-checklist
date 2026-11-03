@@ -4,33 +4,27 @@
   inset-block-end: 0;
   z-index: 20;
   padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
-  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
   border-block-start: 1px solid var(--line);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
-.button {
-  display: block;
-  inline-size: 100%;
-  max-inline-size: 528px;
-  min-block-size: 52px;
+.inner {
+  max-inline-size: 640px;
   margin-inline: auto;
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--accent-contrast);
-  background: var(--accent);
-  border: 0;
-  border-radius: 14px;
-  box-shadow: 0 6px 18px var(--accent-soft);
-  transition: opacity 0.15s ease, transform 0.08s ease;
 }
 
-.button:active:not(:disabled) {
-  transform: scale(0.98);
+/* Leave room for the icon rail. */
+@media (min-width: 768px) {
+  .bar {
+    inset-inline-start: var(--rail-width);
+  }
 }
 
-.button:disabled {
-  opacity: 0.6;
-  cursor: progress;
+/* On wide screens the summary card holds the submit button. */
+@media (min-width: 1180px) {
+  .bar {
+    display: none;
+  }
 }

@@ -68,6 +68,19 @@ export type Cycle = (typeof CYCLE_OPTIONS)[number]['value'];
 export type Direction = (typeof DIRECTION_OPTIONS)[number]['value'];
 export type Outcome = (typeof OUTCOME_OPTIONS)[number]['value'];
 
+/**
+ * Time windows are defined on Istanbul time (UTC+3) as [start, end) minutes from midnight.
+ * The UI shifts them to the selected UTC offset (see `lib/timeWindows.ts`).
+ */
+export const TIME_WINDOW_RANGES: Record<TimeWindow, readonly [number, number]> = {
+  '10–13': [600, 780],
+  '13–15:30': [780, 930],
+  '15:30–16:30': [930, 990],
+  '16:30–18': [990, 1080],
+  '18–21': [1080, 1260],
+  '21–23': [1260, 1380],
+};
+
 export const SYMBOL_VALUES = values(SYMBOL_OPTIONS);
 export const SETUP_VALUES = values(SETUP_OPTIONS);
 export const SESSION_VALUES = values(SESSION_OPTIONS);

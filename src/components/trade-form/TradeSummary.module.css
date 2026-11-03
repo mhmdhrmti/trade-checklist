@@ -1,0 +1,83 @@
+.sticky {
+  position: sticky;
+  inset-block-start: 88px;
+}
+
+.progressRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-block-end: 8px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.progressRow strong {
+  color: var(--text);
+}
+
+.track {
+  block-size: 8px;
+  background: var(--surface-2);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.fill {
+  block-size: 100%;
+  background: var(--grad);
+  border-radius: inherit;
+  transition: inline-size 0.25s ease;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chip {
+  padding: 2px 12px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  background: var(--surface-2);
+  border-radius: 999px;
+}
+
+.chip[data-tone='positive'] {
+  color: var(--positive);
+  background: var(--positive-soft);
+}
+
+.chip[data-tone='negative'] {
+  color: var(--negative);
+  background: var(--negative-soft);
+}
+
+.empty,
+.line {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+/* Phones/tablets use the fixed bottom bar instead. */
+.desktopSubmit {
+  display: none;
+}
+
+@media (min-width: 1180px) {
+  .desktopSubmit {
+    display: block;
+  }
+}
+
+@media (max-width: 1179px) {
+  .sticky {
+    position: static;
+  }
+}

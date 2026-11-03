@@ -1,17 +1,19 @@
-/* Design tokens — minimal palette carried over from the original journal (indigo accent, emerald / red outcomes). */
+/* Design tokens — indigo/violet accent, emerald / red outcomes, soft layered surfaces. */
 :root {
   color-scheme: light dark;
 
-  --bg: #f5f6fb;
+  --bg: #f3f4fa;
   --surface: #ffffff;
   --surface-2: #eef0f8;
-  --text: #141a33;
-  --muted: #66708f;
-  --line: #e1e5f0;
+  --text: #121830;
+  --muted: #646f90;
+  --line: #e2e6f1;
 
   --accent: #4f5bd5;
+  --accent-2: #8b5cf6;
   --accent-contrast: #ffffff;
   --accent-soft: rgb(79 91 213 / 0.12);
+  --grad: linear-gradient(135deg, var(--accent), var(--accent-2));
 
   --positive: #0f9f77;
   --positive-soft: rgb(15 159 119 / 0.12);
@@ -19,20 +21,25 @@
   --negative-soft: rgb(217 74 83 / 0.12);
 
   --radius: 14px;
-  --shadow: 0 1px 2px rgb(20 26 51 / 0.04), 0 8px 24px rgb(20 26 51 / 0.05);
+  --radius-lg: 22px;
+  --shadow: 0 1px 2px rgb(18 24 48 / 0.04), 0 10px 30px rgb(18 24 48 / 0.06);
+  --rail-width: 84px;
+  --glow-1: rgb(139 92 246 / 0.16);
+  --glow-2: rgb(56 189 248 / 0.14);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0d1222;
-    --surface: #151c33;
-    --surface-2: #1c2542;
+    --bg: #0a0f1f;
+    --surface: #131a31;
+    --surface-2: #1b2442;
     --text: #e8ecf8;
-    --muted: #98a3c3;
-    --line: #263050;
+    --muted: #97a2c4;
+    --line: #252f4f;
 
     --accent: #8c97ff;
-    --accent-contrast: #0d1222;
+    --accent-2: #a78bfa;
+    --accent-contrast: #0a0f1f;
     --accent-soft: rgb(140 151 255 / 0.16);
 
     --positive: #2fd39b;
@@ -40,7 +47,9 @@
     --positive-soft: rgb(47 211 155 / 0.14);
     --negative-soft: rgb(255 123 132 / 0.14);
 
-    --shadow: 0 8px 24px rgb(0 0 0 / 0.3);
+    --shadow: 0 10px 30px rgb(0 0 0 / 0.35);
+    --glow-1: rgb(139 92 246 / 0.2);
+    --glow-2: rgb(56 189 248 / 0.1);
   }
 }
 
@@ -58,15 +67,17 @@ html {
 body {
   margin: 0;
   min-block-size: 100dvh;
-  background: var(--bg);
+  background:
+    radial-gradient(900px 420px at 85% -80px, var(--glow-1), transparent 70%),
+    radial-gradient(800px 420px at 0% 10%, var(--glow-2), transparent 70%),
+    var(--bg);
+  background-attachment: fixed;
   color: var(--text);
   font-family: 'Vazirmatn Variable', Vazirmatn, Tahoma, system-ui, sans-serif;
   font-size: 1rem;
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
-  /* Respect notches / home indicator when installed as a PWA. */
-  padding-inline: env(safe-area-inset-left) env(safe-area-inset-right);
 }
 
 button,
@@ -86,7 +97,7 @@ button {
   outline-offset: 2px;
 }
 
-/* Shared look for text-like controls (date button, time, select, R input, notes). */
+/* Shared look for text-like controls (date button, time, dropdown trigger, R input, notes). */
 .control {
   inline-size: 100%;
   min-block-size: 48px;

@@ -17,6 +17,10 @@ A minimalist Persian/English PWA (Next.js, TypeScript) for running a pre-trade c
 | Outcome | TP (1–3 entries, each an R multiple) or SL |
 | Notes | optional — every other field is mandatory |
 
+**Dashboard layout:** full-screen app shell (icon rail + sticky top bar), responsive grid (1 column on phones, 2 on tablets, 3 on desktop). A hero card shows a **live clock (with seconds)** that follows the selected UTC/GMT offset. The offset dropdown opens directly beneath its trigger.
+
+**Time windows follow the offset:** windows are defined on Istanbul time (UTC+3) and shifted to the selected offset for display (e.g. UTC+0: `10–13` shows as `7–10`). The sheet stores both the shifted label (`Time Window`) and the canonical one (`Time Window (UTC+3)`). Time entry is a 24-hour two-box input.
+
 Each setup is written to its **own sheet tab** (`SP2L`, `Pro BTB`, `MicroMap`). Tabs and header rows are created automatically on the first trade; the checklist items become ✓/✗ columns.
 
 ## Google Sheets setup

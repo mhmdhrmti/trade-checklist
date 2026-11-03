@@ -1,0 +1,59 @@
+.clock {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-inline-size: 0;
+  color: #fff;
+}
+
+.caption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.zone {
+  padding: 0 10px;
+  font-size: 0.75rem;
+  background: rgb(255 255 255 / 0.18);
+  border-radius: 999px;
+}
+
+.time {
+  display: flex;
+  align-items: baseline;
+  margin: 0;
+  font-size: clamp(2.75rem, 7vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.colon {
+  padding-inline: 0.06em;
+  opacity: 0.55;
+}
+
+.seconds {
+  opacity: 0.8;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin: 0;
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.92;
+}
+
+.utc {
+  opacity: 0.8;
+}

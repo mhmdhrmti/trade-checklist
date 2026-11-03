@@ -1,4 +1,5 @@
 import { useId } from 'react';
+import { Dropdown } from '@/components/ui/Dropdown';
 import { Field } from '@/components/ui/Field';
 import { isValidDate, isValidTime, toUtc, UTC_OFFSET_OPTIONS } from '@/lib/time';
 
@@ -12,14 +13,14 @@ interface UtcOffsetFieldProps {
 }
 
 export function UtcOffsetField({ value, onChange, date, time }: UtcOffsetFieldProps) {
-  const selectId = useId();
+  const triggerId = useId();
   const utc = isValidDate(date) && isValidTime(time) ? toUtc(date, time, value) : null;
 
   return (
     <Field
       id="utcOffset"
       label="منطقه‌ی زمانی (UTC/GMT)"
-      htmlFor={selectId}
+      htmlFor={triggerId}
       hint={
         utc ? (
           <>
@@ -28,19 +29,7 @@ export function UtcOffsetField({ value, onChange, date, time }: UtcOffsetFieldPr
         ) : null
       }
     >
-      <select
-        id={selectId}
-        className="control"
-        dir="ltr"
-        value={value}
-        onChange={(event) => onChange(Number(event.target.value))}
-      >
-        {UTC_OFFSET_OPTIONS.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
+      <Dropdown id={triggerId} options={UTC_OFFSET_OPTIONS} value={value} onChange={onChange} />
     </Field>
   );
 }

@@ -1,6 +1,7 @@
 import { getChecklist } from '@/config/checklists';
 import type { SetupId } from '@/config/options';
 import { Card } from '@/components/ui/Card';
+import { ChecklistIcon } from '@/components/ui/icons';
 import styles from './SetupChecklist.module.css';
 
 interface SetupChecklistProps {
@@ -21,6 +22,7 @@ export function SetupChecklist({ setup, checked, onToggle, error }: SetupCheckli
     <Card
       id="field-checklist"
       title={`Checklist · ${setup}`}
+      icon={<ChecklistIcon width={18} height={18} />}
       aside={
         <span className={styles.progress} data-complete={complete || undefined} aria-live="polite">
           <span dir="ltr">
@@ -62,6 +64,15 @@ export function SetupChecklist({ setup, checked, onToggle, error }: SetupCheckli
           {error}
         </p>
       )}
+    </Card>
+  );
+}
+
+/** Shown in the checklist slot until a setup is chosen, so the dashboard layout never has a hole. */
+export function EmptyChecklist() {
+  return (
+    <Card title="Checklist" icon={<ChecklistIcon width={18} height={18} />}>
+      <p className={styles.empty}>یکی از Setupها را انتخاب کن تا چک‌لیست مخصوص آن اینجا نمایش داده شود.</p>
     </Card>
   );
 }

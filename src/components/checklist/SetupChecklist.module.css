@@ -114,3 +114,13 @@
   font-weight: 600;
   color: var(--negative);
 }
+
+.empty {
+  margin: 0;
+  padding: 24px 8px;
+  font-size: 0.875rem;
+  text-align: center;
+  color: var(--muted);
+  border: 1.5px dashed var(--line);
+  border-radius: 14px;
+}
