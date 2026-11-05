@@ -73,7 +73,9 @@
   color: var(--muted);
   text-decoration: none;
   border-radius: 14px;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .navItem:hover {
@@ -185,5 +187,23 @@
 
   .main {
     padding: 28px 32px 40px;
+  }
+}
+
+.railActions {
+  margin-block-start: auto;
+  inline-size: 100%;
+}
+
+.topbarActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* The rail (with its own Reset) takes over from tablet width. */
+@media (min-width: 768px) {
+  .mobileOnly {
+    display: none;
   }
 }

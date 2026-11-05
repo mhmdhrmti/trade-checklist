@@ -22,7 +22,11 @@ const complete = (overrides: Partial<TradeDraft> = {}): TradeDraft => ({
 describe('createDraft', () => {
   it('defaults to today and Istanbul time (UTC+3)', () => {
     const draft = createDraft(undefined, NOW);
-    expect(draft).toMatchObject({ date: '2026-11-03', time: '13:00', utcOffset: 180 });
+    expect(draft).toMatchObject({
+      date: '2026-11-03',
+      time: '13:00',
+      utcOffset: 180,
+    });
   });
 });
 
@@ -38,31 +42,38 @@ describe('validateDraft', () => {
     expect(validateDraft(complete())).toEqual({});
   });
 
-  it('requires at least one valid R for TP outcomes', () => {
-    expect(validateDraft(complete({ outcome: 'TP', tpEntries: [''] })).tpEntries).toBeTruthy();
-    expect(validateDraft(complete({ outcome: 'TP', tpEntries: ['2', '0'] })).tpEntries).toBeTruthy();
-    expect(validateDraft(complete({ outcome: 'TP', tpEntries: ['2', '۳'] }))).toEqual({});
+  it('requires a valid positive R for TP outcomes', () => {
+    expect(validateDraft(complete({ outcome: 'TP', tpR: '' })).tpR).toBeTruthy();
+    expect(validateDraft(complete({ outcome: 'TP', tpR: '0' })).tpR).toBeTruthy();
+    expect(validateDraft(complete({ outcome: 'TP', tpR: '۳' }))).toEqual({});
   });
 });
 
 describe('toPayload + schema', () => {
   it('builds a payload the server schema accepts (Persian digits normalised)', () => {
-    const payload = toPayload(complete({ outcome: 'TP', tpEntries: ['۱٫۵', '3'], checklist: ['breakout'], notes: ' hi ' }));
-    expect(payload).toMatchObject({ outcome: 'TP', tpEntries: [1.5, 3], notes: 'hi' });
+    const payload = toPayload(
+      complete({
+        outcome: 'TP',
+        tpR: '۱٫۵',
+        checklist: ['breakout'],
+        notes: ' hi ',
+      }),
+    );
+    expect(payload).toMatchObject({ outcome: 'TP', tpR: 1.5, notes: 'hi' });
     expect(tradePayloadSchema.safeParse(payload).success).toBe(true);
   });
 
-  it('drops TP entries for SL', () => {
-    expect(toPayload(complete({ outcome: 'SL', tpEntries: ['2'] }))?.tpEntries).toEqual([]);
+  it('drops the TP value for SL', () => {
+    expect(toPayload(complete({ outcome: 'SL', tpR: '2' }))?.tpR).toBeNull();
   });
 
   it('rejects tampered payloads on the server', () => {
-    const base = toPayload(complete({ outcome: 'TP', tpEntries: ['2'] }));
+    const base = toPayload(complete({ outcome: 'TP', tpR: '2' }));
     expect(base).not.toBeNull();
     const bad = [
       { ...base, symbol: 'EURUSD' },
-      { ...base, tpEntries: [1, 2, 3, 4] },
-      { ...base, tpEntries: [] },
+      { ...base, tpR: -1 },
+      { ...base, tpR: null },
       { ...base, outcome: 'SL' },
       { ...base, checklist: ['not-an-item'] },
       { ...base, utcOffsetMinutes: 181 },

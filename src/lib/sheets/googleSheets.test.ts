@@ -13,18 +13,36 @@ vi.mock('google-auth-library', () => ({
       if (failWith) throw Object.assign(new Error('boom'), { status: failWith });
       if (opts.url.endsWith('A1')) return { data: { values: headerPresent ? [['Date']] : undefined } };
       if (opts.url.includes(':batchUpdate') && opts.data?.requests?.[0]?.addSheet)
-        return { data: { replies: [{ addSheet: { properties: { sheetId: 42 } } }] } };
+        return {
+          data: { replies: [{ addSheet: { properties: { sheetId: 42 } } }] },
+        };
       if (!opts.method && !opts.url.includes('/values/'))
-        return { data: { sheets: existingTabs.map((title, i) => ({ properties: { title, sheetId: i } })) } };
+        return {
+          data: {
+            sheets: existingTabs.map((title, i) => ({
+              properties: { title, sheetId: i },
+            })),
+          },
+        };
       return { data: {} };
     }
   },
 }));
 
 const payload: TradePayload = {
-  date: '2026-11-03', time: '14:00', utcOffsetMinutes: 180, symbol: 'XAUUSD', setup: 'MicroMap',
-  checklist: ['ema-confirmation'], session: 'London', timeWindow: '13–15:30', cycle: 'Spike',
-  direction: 'Buy', outcome: 'SL', tpEntries: [], notes: '',
+  date: '2026-11-03',
+  time: '14:00',
+  utcOffsetMinutes: 180,
+  symbol: 'XAUUSD',
+  setup: 'MicroMap',
+  checklist: ['ema-confirmation'],
+  session: 'London',
+  timeWindow: '13–15:30',
+  cycle: 'Spike',
+  direction: 'Buy',
+  outcome: 'SL',
+  tpR: null,
+  notes: '',
 };
 
 async function load() {
@@ -73,16 +91,24 @@ describe('appendTrade', () => {
   it('maps Google errors to API codes', async () => {
     const { appendTrade } = await load();
     failWith = 403;
-    await expect(appendTrade(payload)).rejects.toMatchObject({ code: 'sheets_forbidden' });
+    await expect(appendTrade(payload)).rejects.toMatchObject({
+      code: 'sheets_forbidden',
+    });
     failWith = 404;
-    await expect(appendTrade(payload)).rejects.toMatchObject({ code: 'sheets_not_found' });
+    await expect(appendTrade(payload)).rejects.toMatchObject({
+      code: 'sheets_not_found',
+    });
     failWith = 500;
-    await expect(appendTrade(payload)).rejects.toMatchObject({ code: 'sheets_error' });
+    await expect(appendTrade(payload)).rejects.toMatchObject({
+      code: 'sheets_error',
+    });
   });
 
   it('reports missing configuration', async () => {
     delete process.env.GOOGLE_SHEET_ID;
     const { appendTrade } = await load();
-    await expect(appendTrade(payload)).rejects.toMatchObject({ code: 'sheets_not_configured' });
+    await expect(appendTrade(payload)).rejects.toMatchObject({
+      code: 'sheets_not_configured',
+    });
   });
 });

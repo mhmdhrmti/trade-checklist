@@ -15,7 +15,10 @@ interface DateFieldProps {
   error?: string;
 }
 
-const weekdayFormat = new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone: 'UTC' });
+const weekdayFormat = new Intl.DateTimeFormat('en-US', {
+  weekday: 'long',
+  timeZone: 'UTC',
+});
 
 /** Gregorian date picker. Custom (not `<input type="date">`) so a Persian-locale browser can never switch it to the Jalali calendar. */
 export function DateField({ value, onChange, utcOffset, error }: DateFieldProps) {

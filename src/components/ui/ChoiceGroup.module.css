@@ -35,7 +35,11 @@
   background: var(--surface);
   border: 1.5px solid var(--line);
   border-radius: 12px;
-  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.08s ease;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.08s ease;
 }
 
 .hint {

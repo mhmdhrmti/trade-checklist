@@ -4,7 +4,6 @@ import {
   CYCLE_VALUES,
   DIRECTION_VALUES,
   MAX_NOTES_LENGTH,
-  MAX_TP_ENTRIES,
   OUTCOME_VALUES,
   SESSION_VALUES,
   SETUP_VALUES,
@@ -34,19 +33,34 @@ export const tradePayloadSchema = z
     cycle: z.enum(CYCLE_VALUES),
     direction: z.enum(DIRECTION_VALUES),
     outcome: z.enum(OUTCOME_VALUES),
-    tpEntries: z.array(z.number().positive().max(MAX_R_VALUE)).max(MAX_TP_ENTRIES),
+    tpR: z.number().positive().max(MAX_R_VALUE).nullable(),
     notes: z.string().max(MAX_NOTES_LENGTH),
   })
   .superRefine((payload, ctx) => {
-    if (payload.outcome === 'TP' && payload.tpEntries.length === 0) {
-      ctx.addIssue({ code: 'custom', path: ['tpEntries'], message: 'TP needs at least one entry' });
+    if (payload.outcome === 'TP' && payload.tpR === null) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['tpR'],
+        message: 'TP needs an R value',
+      });
     }
-    if (payload.outcome === 'SL' && payload.tpEntries.length > 0) {
-      ctx.addIssue({ code: 'custom', path: ['tpEntries'], message: 'SL cannot have TP entries' });
+    if (payload.outcome === 'SL' && payload.tpR !== null) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['tpR'],
+        message: 'SL cannot have a TP value',
+      });
     }
     const allowed = new Set(getChecklist(payload.setup).map((item) => item.id));
-    if (payload.checklist.some((id) => !allowed.has(id)) || new Set(payload.checklist).size !== payload.checklist.length) {
-      ctx.addIssue({ code: 'custom', path: ['checklist'], message: 'unknown checklist item' });
+    if (
+      payload.checklist.some((id) => !allowed.has(id)) ||
+      new Set(payload.checklist).size !== payload.checklist.length
+    ) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['checklist'],
+        message: 'unknown checklist item',
+      });
     }
   });
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useReducer, useState } from 'react';
-import { MAX_TP_ENTRIES, type Outcome, type SetupId } from '@/config/options';
+import type { Outcome, SetupId } from '@/config/options';
 import { DEFAULT_UTC_OFFSET, nowInOffset } from '@/lib/time';
 import { toPayload, validateDraft, type DraftErrors } from '@/lib/validation';
 import type { ApiErrorCode, ApiResponse, DraftField, TradeDraft } from '@/types/trade';
@@ -18,13 +18,14 @@ const FIELD_ORDER: (keyof DraftErrors)[] = [
   'cycle',
   'direction',
   'outcome',
-  'tpEntries',
+  'tpR',
 ];
 
 const API_ERROR_MESSAGES: Record<ApiErrorCode, string> = {
   invalid_payload: 'اطلاعات واردشده معتبر نیست؛ فرم را بررسی کن.',
   sheets_not_configured: 'اتصال به Google Sheet هنوز تنظیم نشده است (متغیرهای محیطی سرور را بررسی کن).',
-  sheets_forbidden: 'دسترسی به Google Sheet وجود ندارد؛ شیت را با ایمیل Service Account به‌عنوان Editor به‌اشتراک بگذار.',
+  sheets_forbidden:
+    'دسترسی به Google Sheet وجود ندارد؛ شیت را با ایمیل Service Account به‌عنوان Editor به‌اشتراک بگذار.',
   sheets_not_found: 'Google Sheet پیدا نشد؛ GOOGLE_SHEET_ID را بررسی کن.',
   sheets_error: 'ثبت در Google Sheet انجام نشد؛ چند لحظه بعد دوباره تلاش کن.',
 };
@@ -46,21 +47,20 @@ export function createDraft(utcOffset: number = DEFAULT_UTC_OFFSET, now: Date = 
     cycle: null,
     direction: null,
     outcome: null,
-    tpEntries: [''],
+    tpR: '',
     notes: '',
   };
 }
 
-type SetAction = { [K in DraftField]: { type: 'set'; field: K; value: TradeDraft[K] } }[DraftField];
+type SetAction = {
+  [K in DraftField]: { type: 'set'; field: K; value: TradeDraft[K] };
+}[DraftField];
 
 type Action =
   | SetAction
   | { type: 'selectSetup'; setup: SetupId }
   | { type: 'toggleCheck'; id: string }
   | { type: 'selectOutcome'; outcome: Outcome }
-  | { type: 'setTp'; index: number; value: string }
-  | { type: 'addTp' }
-  | { type: 'removeTp'; index: number }
   | { type: 'reset'; draft: TradeDraft };
 
 function reducer(state: TradeDraft, action: Action): TradeDraft {
@@ -78,15 +78,7 @@ function reducer(state: TradeDraft, action: Action): TradeDraft {
           : [...state.checklist, action.id],
       };
     case 'selectOutcome':
-      return { ...state, outcome: action.outcome, tpEntries: state.tpEntries.length ? state.tpEntries : [''] };
-    case 'setTp':
-      return { ...state, tpEntries: state.tpEntries.map((v, i) => (i === action.index ? action.value : v)) };
-    case 'addTp':
-      return state.tpEntries.length >= MAX_TP_ENTRIES ? state : { ...state, tpEntries: [...state.tpEntries, ''] };
-    case 'removeTp':
-      return state.tpEntries.length <= 1
-        ? state
-        : { ...state, tpEntries: state.tpEntries.filter((_, i) => i !== action.index) };
+      return { ...state, outcome: action.outcome };
     case 'reset':
       return action.draft;
   }
@@ -99,7 +91,11 @@ export interface Feedback {
 
 export function useTradeForm() {
   // Date/time are filled after mount so server and client HTML match (no hydration mismatch).
-  const [draft, dispatch] = useReducer(reducer, undefined, () => ({ ...createDraft(), date: '', time: '' }));
+  const [draft, dispatch] = useReducer(reducer, undefined, () => ({
+    ...createDraft(),
+    date: '',
+    time: '',
+  }));
   const [showErrors, setShowErrors] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [feedback, setFeedback] = useState<Feedback | null>(null);
@@ -111,8 +107,7 @@ export function useTradeForm() {
   const errors: DraftErrors = showErrors ? validateDraft(draft) : {};
 
   const setField = useCallback(
-    <K extends DraftField>(field: K, value: TradeDraft[K]) =>
-      dispatch({ type: 'set', field, value } as SetAction),
+    <K extends DraftField>(field: K, value: TradeDraft[K]) => dispatch({ type: 'set', field, value } as SetAction),
     [],
   );
 
@@ -142,7 +137,10 @@ export function useTradeForm() {
       if (response.ok && result?.ok) {
         dispatch({ type: 'reset', draft: createDraft(draft.utcOffset) });
         setShowErrors(false);
-        setFeedback({ kind: 'success', message: `ثبت شد — ${payload.setup} · ${payload.symbol} · ${payload.outcome}` });
+        setFeedback({
+          kind: 'success',
+          message: `ثبت شد — ${payload.setup} · ${payload.symbol} · ${payload.outcome}`,
+        });
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         const code = result && !result.ok ? result.error : 'sheets_error';
@@ -155,6 +153,13 @@ export function useTradeForm() {
     }
   }, [draft, submitting]);
 
+  /** Back to the defaults (SP2L, today, UTC+3, nothing selected) and clears any messages. */
+  const reset = useCallback(() => {
+    dispatch({ type: 'reset', draft: createDraft() });
+    setShowErrors(false);
+    setFeedback(null);
+  }, []);
+
   return {
     draft,
     errors,
@@ -165,9 +170,7 @@ export function useTradeForm() {
     selectSetup: (setup: SetupId) => dispatch({ type: 'selectSetup', setup }),
     toggleCheck: (id: string) => dispatch({ type: 'toggleCheck', id }),
     selectOutcome: (outcome: Outcome) => dispatch({ type: 'selectOutcome', outcome }),
-    setTp: (index: number, value: string) => dispatch({ type: 'setTp', index, value }),
-    addTp: () => dispatch({ type: 'addTp' }),
-    removeTp: (index: number) => dispatch({ type: 'removeTp', index }),
     submit,
+    reset,
   };
 }

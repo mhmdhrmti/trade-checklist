@@ -1,0 +1,36 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  background: var(--positive-soft);
+  border-radius: 14px;
+  scroll-margin-block: 96px;
+}
+
+.title {
+  display: block;
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--positive);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.unit {
+  flex: none;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.error {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--negative);
+}

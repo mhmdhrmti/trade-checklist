@@ -15,14 +15,26 @@ describe('time helpers', () => {
 
   it('reads the clock of the chosen offset, crossing midnight', () => {
     const now = new Date('2026-11-02T22:30:00Z');
-    expect(nowInOffset(180, now)).toEqual({ date: '2026-11-03', time: '01:30' });
+    expect(nowInOffset(180, now)).toEqual({
+      date: '2026-11-03',
+      time: '01:30',
+    });
     expect(nowInOffset(0, now)).toEqual({ date: '2026-11-02', time: '22:30' });
-    expect(nowInOffset(-300, now)).toEqual({ date: '2026-11-02', time: '17:30' });
+    expect(nowInOffset(-300, now)).toEqual({
+      date: '2026-11-02',
+      time: '17:30',
+    });
   });
 
   it('converts wall-clock time to UTC', () => {
-    expect(toUtc('2026-11-03', '01:30', 180)).toEqual({ date: '2026-11-02', time: '22:30' });
-    expect(toUtc('2026-11-03', '14:00', 210)).toEqual({ date: '2026-11-03', time: '10:30' });
+    expect(toUtc('2026-11-03', '01:30', 180)).toEqual({
+      date: '2026-11-02',
+      time: '22:30',
+    });
+    expect(toUtc('2026-11-03', '14:00', 210)).toEqual({
+      date: '2026-11-03',
+      time: '10:30',
+    });
   });
 
   it('validates calendar dates', () => {

@@ -35,7 +35,10 @@ let cachedClient: { key: string; client: JWT } | null = null;
 function getClient({ email, privateKey }: SheetsConfig): JWT {
   const key = `${email}:${privateKey.length}`;
   if (cachedClient?.key !== key) {
-    cachedClient = { key, client: new JWT({ email, key: privateKey, scopes: SCOPES }) };
+    cachedClient = {
+      key,
+      client: new JWT({ email, key: privateKey, scopes: SCOPES }),
+    };
   }
   return cachedClient.client;
 }
@@ -48,8 +51,9 @@ const rangeUrl = (base: string, range: string) => `${base}/values/${encodeURICom
 
 function toSheetsError(error: unknown): SheetsError {
   if (error instanceof SheetsError) return error;
-  const status = (error as { status?: number; response?: { status?: number } }).status
-    ?? (error as { response?: { status?: number } }).response?.status;
+  const status =
+    (error as { status?: number; response?: { status?: number } }).status ??
+    (error as { response?: { status?: number } }).response?.status;
   if (status === 403) return new SheetsError('sheets_forbidden');
   if (status === 404) return new SheetsError('sheets_not_found');
   return new SheetsError('sheets_error', error instanceof Error ? error.message : undefined);
@@ -71,7 +75,9 @@ async function ensureTab(client: JWT, base: string, tab: string, headers: string
   let sheetId = meta.data.sheets?.find((s) => s.properties?.title === tab)?.properties?.sheetId;
 
   if (sheetId === undefined) {
-    const created = await client.request<{ replies?: { addSheet?: { properties?: { sheetId?: number } } }[] }>({
+    const created = await client.request<{
+      replies?: { addSheet?: { properties?: { sheetId?: number } } }[];
+    }>({
       url: `${base}:batchUpdate`,
       method: 'POST',
       data: { requests: [{ addSheet: { properties: { title: tab } } }] },
@@ -103,10 +109,21 @@ async function styleHeader(client: JWT, base: string, sheetId: number, columns: 
       method: 'POST',
       data: {
         requests: [
-          { updateSheetProperties: { properties: { sheetId, gridProperties: { frozenRowCount: 1 } }, fields: 'gridProperties.frozenRowCount' } },
+          {
+            updateSheetProperties: {
+              properties: { sheetId, gridProperties: { frozenRowCount: 1 } },
+              fields: 'gridProperties.frozenRowCount',
+            },
+          },
           {
             repeatCell: {
-              range: { sheetId, startRowIndex: 0, endRowIndex: 1, startColumnIndex: 0, endColumnIndex: columns },
+              range: {
+                sheetId,
+                startRowIndex: 0,
+                endRowIndex: 1,
+                startColumnIndex: 0,
+                endColumnIndex: columns,
+              },
               cell: { userEnteredFormat: { textFormat: { bold: true } } },
               fields: 'userEnteredFormat.textFormat.bold',
             },
@@ -131,7 +148,10 @@ export async function appendTrade(payload: TradePayload): Promise<void> {
     await client.request({
       url: `${rangeUrl(base, `${quoteTab(tab)}!A:A`)}:append`,
       method: 'POST',
-      params: { valueInputOption: 'USER_ENTERED', insertDataOption: 'INSERT_ROWS' },
+      params: {
+        valueInputOption: 'USER_ENTERED',
+        insertDataOption: 'INSERT_ROWS',
+      },
       data: { values: [buildRow(payload)] },
     });
   } catch (error) {

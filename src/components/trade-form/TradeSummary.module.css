@@ -55,12 +55,12 @@
   border-radius: 999px;
 }
 
-.chip[data-tone="positive"] {
+.chip[data-tone='positive'] {
   color: var(--positive);
   background: var(--positive-soft);
 }
 
-.chip[data-tone="negative"] {
+.chip[data-tone='negative'] {
   color: var(--negative);
   background: var(--negative-soft);
 }

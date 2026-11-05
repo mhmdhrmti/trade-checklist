@@ -38,7 +38,10 @@ export const UTC_OFFSET_OPTIONS: readonly UtcOffsetOption[] = [
   .sort((a, b) => a - b)
   .map((value) => {
     const hint = OFFSET_HINTS[value];
-    return { value, label: hint ? `${formatOffset(value)} · ${hint}` : formatOffset(value) };
+    return {
+      value,
+      label: hint ? `${formatOffset(value)} · ${hint}` : formatOffset(value),
+    };
   });
 
 /** Today's date and current time as seen on a clock set to the given UTC offset. */
@@ -72,7 +75,10 @@ export function toUtc(date: string, time: string, offsetMinutes: number): { date
   };
 }
 
-const weekdayFormat = new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone: 'UTC' });
+const weekdayFormat = new Intl.DateTimeFormat('en-US', {
+  weekday: 'long',
+  timeZone: 'UTC',
+});
 
 /** Everything a clock face needs, for a clock set to `offsetMinutes` (and the matching UTC reading). */
 export function clockParts(offsetMinutes: number, now: Date = new Date()) {

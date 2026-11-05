@@ -15,7 +15,7 @@ const payload = (overrides: Partial<TradePayload> = {}): TradePayload => ({
   cycle: 'Trading Range',
   direction: 'Sell',
   outcome: 'TP',
-  tpEntries: [1.5, 3],
+  tpR: 1.5,
   notes: '=HYPERLINK("http://x")',
   ...overrides,
 });
@@ -23,7 +23,14 @@ const payload = (overrides: Partial<TradePayload> = {}): TradePayload => ({
 describe('sheet rows', () => {
   it('writes the window as read on the chosen clock plus the UTC+3 original', () => {
     const headers = buildHeaders('SP2L');
-    const row = buildRow(payload({ setup: 'SP2L', utcOffsetMinutes: 0, timeWindow: '13–15:30', checklist: [] }));
+    const row = buildRow(
+      payload({
+        setup: 'SP2L',
+        utcOffsetMinutes: 0,
+        timeWindow: '13–15:30',
+        checklist: [],
+      }),
+    );
     expect(row[headers.indexOf('Time Window')]).toBe("'10–12:30");
     expect(row[headers.indexOf('Time Window (UTC+3)')]).toBe("'13–15:30");
   });
@@ -35,20 +42,18 @@ describe('sheet rows', () => {
   });
 
   it('uses one checklist column per item', () => {
-    expect(buildHeaders('MicroMap').slice(15, 18)).toEqual(['Valid SP2L Leg', 'EMA Confirmation', 'With the Trend']);
+    expect(buildHeaders('MicroMap').slice(13, 16)).toEqual(['Valid SP2L Leg', 'EMA Confirmation', 'With the Trend']);
     expect(buildHeaders('SP2L')).toContain('Follow-through Candle');
   });
 
-  it('writes local + UTC time, TP entries and ticked items', () => {
+  it('writes local + UTC time, TP R value and ticked items', () => {
     const headers = buildHeaders('Pro BTB');
     const row = buildRow(payload(), new Date('2026-11-03T05:06:07Z'));
     const cell = (name: string) => row[headers.indexOf(name)];
     expect(cell('Date')).toBe('2026-11-03');
     expect(cell('Time')).toBe('01:30');
     expect(cell('UTC DateTime')).toBe('2026-11-02 22:30');
-    expect(cell('TP1 (R)')).toBe(1.5);
-    expect(cell('TP2 (R)')).toBe(3);
-    expect(cell('TP3 (R)')).toBe('');
+    expect(cell('TP (R)')).toBe(1.5);
     expect(cell('Time Window')).toBe("'16:30–18"); // leading ' keeps Sheets from re-parsing it; Sheets strips it
     expect(cell('Valid SP2L Leg')).toBe('✓');
     expect(cell('EMA Confirmation')).toBe('✗');
@@ -64,9 +69,9 @@ describe('sheet rows', () => {
     expect(row[row.length - 2]).toBe(`'=HYPERLINK("http://x")`);
   });
 
-  it('leaves TP columns empty for SL', () => {
+  it('leaves the TP column empty for SL', () => {
     const headers = buildHeaders('SP2L');
-    const row = buildRow(payload({ setup: 'SP2L', outcome: 'SL', tpEntries: [], checklist: [] }));
-    expect(['TP1 (R)', 'TP2 (R)', 'TP3 (R)'].map((h) => row[headers.indexOf(h)])).toEqual(['', '', '']);
+    const row = buildRow(payload({ setup: 'SP2L', outcome: 'SL', tpR: null, checklist: [] }));
+    expect(row[headers.indexOf('TP (R)')]).toBe('');
   });
 });

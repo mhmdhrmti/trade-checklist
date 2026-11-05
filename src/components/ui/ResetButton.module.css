@@ -1,0 +1,42 @@
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  background: none;
+  border: 0;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.button:hover:not(:disabled) {
+  color: var(--negative);
+  background: var(--negative-soft);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.button[data-variant='rail'] {
+  flex-direction: column;
+  gap: 2px;
+  inline-size: 100%;
+  padding: 10px 4px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  border-radius: 14px;
+}
+
+.button[data-variant='compact'] {
+  inline-size: 38px;
+  block-size: 38px;
+  background: var(--surface-2);
+  border-radius: 12px;
+}
+
+.label {
+  line-height: 1.5;
+}

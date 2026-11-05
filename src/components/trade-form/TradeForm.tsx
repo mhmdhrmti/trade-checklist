@@ -1,40 +1,33 @@
-"use client";
+'use client';
 
-import { useId, useMemo, type FormEvent } from "react";
-import {
-  CYCLE_OPTIONS,
-  SESSION_OPTIONS,
-  SYMBOL_OPTIONS,
-} from "@/config/options";
-import { useTradeForm } from "@/hooks/useTradeForm";
-import { nowInOffset } from "@/lib/time";
-import { getTimeWindowOptions } from "@/lib/timeWindows";
-import { SetupPanel } from "@/components/checklist/SetupPanel";
-import { DateField } from "@/components/fields/DateField";
-import { TimeField } from "@/components/fields/TimeField";
-import { UtcOffsetField } from "@/components/fields/UtcOffsetField";
-import { Card } from "@/components/ui/Card";
-import { ChoiceGroup } from "@/components/ui/ChoiceGroup";
-import { Field, labelId } from "@/components/ui/Field";
-import { LiveClock } from "@/components/ui/LiveClock";
-import { OfflineBanner } from "@/components/ui/OfflineBanner";
-import { SubmitBar } from "@/components/ui/SubmitBar";
-import { Toast } from "@/components/ui/Toast";
-import { CalendarIcon, MarketIcon } from "@/components/ui/icons";
-import { TradeResultCard } from "./TradeResultCard";
-import styles from "./TradeForm.module.css";
+import { useId, useMemo, type FormEvent } from 'react';
+import { CYCLE_OPTIONS, SESSION_OPTIONS, SYMBOL_OPTIONS } from '@/config/options';
+import { useTradeFormContext } from '@/context/TradeFormContext';
+import { nowInOffset } from '@/lib/time';
+import { getTimeWindowOptions } from '@/lib/timeWindows';
+import { SetupPanel } from '@/components/checklist/SetupPanel';
+import { DateField } from '@/components/fields/DateField';
+import { TimeField } from '@/components/fields/TimeField';
+import { UtcOffsetField } from '@/components/fields/UtcOffsetField';
+import { Card } from '@/components/ui/Card';
+import { ChoiceGroup } from '@/components/ui/ChoiceGroup';
+import { Field, labelId } from '@/components/ui/Field';
+import { LiveClock } from '@/components/ui/LiveClock';
+import { OfflineBanner } from '@/components/ui/OfflineBanner';
+import { SubmitBar } from '@/components/ui/SubmitBar';
+import { Toast } from '@/components/ui/Toast';
+import { CalendarIcon, MarketIcon } from '@/components/ui/icons';
+import { TradeResultCard } from './TradeResultCard';
+import styles from './TradeForm.module.css';
 
 const ICON = { width: 18, height: 18 } as const;
 
 export function TradeForm() {
-  const form = useTradeForm();
+  const form = useTradeFormContext();
   const { draft, errors } = form;
   const formId = useId();
   // Windows are defined on UTC+3; their labels follow the selected offset.
-  const windowOptions = useMemo(
-    () => getTimeWindowOptions(draft.utcOffset),
-    [draft.utcOffset],
-  );
+  const windowOptions = useMemo(() => getTimeWindowOptions(draft.utcOffset), [draft.utcOffset]);
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
@@ -42,12 +35,7 @@ export function TradeForm() {
   };
 
   return (
-    <form
-      className={styles.form}
-      onSubmit={handleSubmit}
-      noValidate
-      aria-label="Pre-trade checklist"
-    >
+    <form className={styles.form} onSubmit={handleSubmit} noValidate aria-label="Pre-trade checklist">
       <OfflineBanner />
 
       <div className={styles.dashboard}>
@@ -56,7 +44,7 @@ export function TradeForm() {
           <div className={styles.zone}>
             <UtcOffsetField
               value={draft.utcOffset}
-              onChange={(minutes) => form.setField("utcOffset", minutes)}
+              onChange={(minutes) => form.setField('utcOffset', minutes)}
               date={draft.date}
               time={draft.time}
             />
@@ -68,26 +56,24 @@ export function TradeForm() {
             <div className={styles.pair}>
               <DateField
                 value={draft.date}
-                onChange={(date) => form.setField("date", date)}
+                onChange={(date) => form.setField('date', date)}
                 utcOffset={draft.utcOffset}
                 error={errors.date}
               />
               <TimeField
                 value={draft.time}
-                onChange={(time) => form.setField("time", time)}
-                onNow={() =>
-                  form.setField("time", nowInOffset(draft.utcOffset).time)
-                }
+                onChange={(time) => form.setField('time', time)}
+                onNow={() => form.setField('time', nowInOffset(draft.utcOffset).time)}
                 error={errors.time}
               />
             </div>
             <Field id="symbol" label="نماد معاملاتی" error={errors.symbol}>
               <ChoiceGroup
                 name={`${formId}-symbol`}
-                labelledBy={labelId("symbol")}
+                labelledBy={labelId('symbol')}
                 options={SYMBOL_OPTIONS}
                 value={draft.symbol}
-                onChange={(symbol) => form.setField("symbol", symbol)}
+                onChange={(symbol) => form.setField('symbol', symbol)}
                 columns={2}
                 invalid={!!errors.symbol}
               />
@@ -100,10 +86,10 @@ export function TradeForm() {
             <Field id="session" label="Session" error={errors.session}>
               <ChoiceGroup
                 name={`${formId}-session`}
-                labelledBy={labelId("session")}
+                labelledBy={labelId('session')}
                 options={SESSION_OPTIONS}
                 value={draft.session}
-                onChange={(session) => form.setField("session", session)}
+                onChange={(session) => form.setField('session', session)}
                 columns={3}
                 invalid={!!errors.session}
               />
@@ -116,10 +102,10 @@ export function TradeForm() {
             >
               <ChoiceGroup
                 name={`${formId}-window`}
-                labelledBy={labelId("timeWindow")}
+                labelledBy={labelId('timeWindow')}
                 options={windowOptions}
                 value={draft.timeWindow}
-                onChange={(window) => form.setField("timeWindow", window)}
+                onChange={(window) => form.setField('timeWindow', window)}
                 columns={3}
                 invalid={!!errors.timeWindow}
               />
@@ -127,10 +113,10 @@ export function TradeForm() {
             <Field id="cycle" label="Cycle" error={errors.cycle}>
               <ChoiceGroup
                 name={`${formId}-cycle`}
-                labelledBy={labelId("cycle")}
+                labelledBy={labelId('cycle')}
                 options={CYCLE_OPTIONS}
                 value={draft.cycle}
-                onChange={(cycle) => form.setField("cycle", cycle)}
+                onChange={(cycle) => form.setField('cycle', cycle)}
                 columns={3}
                 invalid={!!errors.cycle}
               />

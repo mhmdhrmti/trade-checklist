@@ -15,7 +15,10 @@ const STATUS: Record<ApiErrorCode, number> = {
 };
 
 const fail = (error: ApiErrorCode) =>
-  NextResponse.json<ApiResponse>({ ok: false, error }, { status: STATUS[error], headers: { 'Cache-Control': 'no-store' } });
+  NextResponse.json<ApiResponse>(
+    { ok: false, error },
+    { status: STATUS[error], headers: { 'Cache-Control': 'no-store' } },
+  );
 
 /** Receives a finished trade and appends it to the Google Sheet. Nothing is stored locally. */
 export async function POST(request: Request) {

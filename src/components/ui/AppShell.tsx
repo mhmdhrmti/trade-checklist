@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { BrandIcon } from './icons';
 import { ConnectionStatus } from './ConnectionStatus';
+import { ResetButton } from './ResetButton';
 import { SideNav } from './SideNav';
 import styles from './AppShell.module.css';
 
@@ -18,7 +19,12 @@ export function AppShell({ children }: { children: ReactNode }) {
             <h1 className={styles.title}>چک‌لیست قبل از معامله</h1>
             <p className={styles.subtitle}>Pre-Trade Checklist</p>
           </div>
-          <ConnectionStatus />
+          <div className={styles.topbarActions}>
+            <span className={styles.mobileOnly}>
+              <ResetButton variant="compact" />
+            </span>
+            <ConnectionStatus />
+          </div>
         </header>
         <main className={styles.main}>{children}</main>
       </div>

@@ -69,8 +69,7 @@ body {
   min-block-size: 100dvh;
   background:
     radial-gradient(900px 420px at 85% -80px, var(--glow-1), transparent 70%),
-    radial-gradient(800px 420px at 0% 10%, var(--glow-2), transparent 70%),
-    var(--bg);
+    radial-gradient(800px 420px at 0% 10%, var(--glow-2), transparent 70%), var(--bg);
   background-attachment: fixed;
   color: var(--text);
   font-family: 'Vazirmatn Variable', Vazirmatn, Tahoma, system-ui, sans-serif;
@@ -107,7 +106,9 @@ button {
   border-radius: 12px;
   /* 16px minimum stops iOS from zooming the page on focus. */
   font-size: 1rem;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .control:focus-visible {

@@ -1,6 +1,6 @@
-import { getChecklist } from "@/config/checklists";
-import type { SetupId } from "@/config/options";
-import styles from "./SetupChecklist.module.css";
+import { getChecklist } from '@/config/checklists';
+import type { SetupId } from '@/config/options';
+import styles from './SetupChecklist.module.css';
 
 interface SetupChecklistProps {
   setup: SetupId;
@@ -11,12 +11,7 @@ interface SetupChecklistProps {
 }
 
 /** The pre-trade checklist for the selected setup. Body of the setup panel; items share the available height evenly. */
-export function SetupChecklist({
-  setup,
-  checked,
-  onToggle,
-  error,
-}: SetupChecklistProps) {
+export function SetupChecklist({ setup, checked, onToggle, error }: SetupChecklistProps) {
   const items = getChecklist(setup);
   const done = items.filter((item) => checked.includes(item.id)).length;
   const complete = done === items.length;
@@ -27,11 +22,7 @@ export function SetupChecklist({
         <h3 className={styles.heading} dir="ltr">
           Checklist · <bdi dir="ltr">{setup}</bdi>
         </h3>
-        <span
-          className={styles.progress}
-          data-complete={complete || undefined}
-          aria-live="polite"
-        >
+        <span className={styles.progress} data-complete={complete || undefined} aria-live="polite">
           <span dir="ltr">
             {done}/{items.length}
           </span>
@@ -39,10 +30,7 @@ export function SetupChecklist({
       </div>
 
       <div className={styles.bar} role="presentation">
-        <div
-          className={styles.fill}
-          style={{ inlineSize: `${(done / items.length) * 100}%` }}
-        />
+        <div className={styles.fill} style={{ inlineSize: `${(done / items.length) * 100}%` }} />
       </div>
 
       <ul className={styles.list}>
@@ -62,9 +50,7 @@ export function SetupChecklist({
                 <span className={styles.title} dir="ltr">
                   {item.title}
                 </span>
-                {item.description && (
-                  <span className={styles.description}>{item.description}</span>
-                )}
+                {item.description && <span className={styles.description}>{item.description}</span>}
               </span>
             </label>
           </li>

@@ -47,10 +47,36 @@ export function TimeField({ value, onChange, onNow, error }: TimeFieldProps) {
   return (
     <Field id="time" label="ساعت (24h)" htmlFor={hourId} error={error}>
       <div className={styles.row}>
-        <div className={`control ${styles.box}`} dir="ltr" role="group" aria-label="Time, 24-hour" data-invalid={error ? true : undefined}>
-          <input {...common} id={hourId} className={styles.part} aria-label="Hour" onBlur={padHour} placeholder="HH" value={hour} onChange={(e) => setHour(e.target.value)} />
-          <span className={styles.colon} aria-hidden="true">:</span>
-          <input {...common} ref={minuteRef} className={styles.part} aria-label="Minute" onBlur={padMinute} placeholder="mm" value={minute} onChange={(e) => setMinute(e.target.value)} />
+        <div
+          className={`control ${styles.box}`}
+          dir="ltr"
+          role="group"
+          aria-label="Time, 24-hour"
+          data-invalid={error ? true : undefined}
+        >
+          <input
+            {...common}
+            id={hourId}
+            className={styles.part}
+            aria-label="Hour"
+            onBlur={padHour}
+            placeholder="HH"
+            value={hour}
+            onChange={(e) => setHour(e.target.value)}
+          />
+          <span className={styles.colon} aria-hidden="true">
+            :
+          </span>
+          <input
+            {...common}
+            ref={minuteRef}
+            className={styles.part}
+            aria-label="Minute"
+            onBlur={padMinute}
+            placeholder="mm"
+            value={minute}
+            onChange={(e) => setMinute(e.target.value)}
+          />
         </div>
         <button type="button" className={styles.now} onClick={onNow}>
           اکنون

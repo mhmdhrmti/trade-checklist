@@ -89,9 +89,6 @@ export const CYCLE_VALUES = values(CYCLE_OPTIONS);
 export const DIRECTION_VALUES = values(DIRECTION_OPTIONS);
 export const OUTCOME_VALUES = values(OUTCOME_OPTIONS);
 
-/** A TP outcome may record between 1 and this many entries. */
-export const MAX_TP_ENTRIES = 3;
-
 /** Notes are optional and capped to keep sheet cells tidy. */
 export const MAX_NOTES_LENGTH = 1000;
 

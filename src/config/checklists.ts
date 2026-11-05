@@ -41,7 +41,11 @@ export const CHECKLISTS: Record<SetupId, readonly ChecklistItem[]> = {
     },
     EMA_CONFIRMATION,
     { id: 'breakout', title: 'Breakout', description: 'شکست انجام شده است' },
-    { id: 'valid-with-the-trend', title: 'Valid – With the Trend', description: 'معتبر و هم‌جهت با ترند' },
+    {
+      id: 'valid-with-the-trend',
+      title: 'Valid – With the Trend',
+      description: 'معتبر و هم‌جهت با ترند',
+    },
   ],
   'Pro BTB': [
     VALID_SP2L_LEG,

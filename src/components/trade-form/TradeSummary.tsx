@@ -1,20 +1,20 @@
-import { getChecklist } from "@/config/checklists";
-import { windowLabelAt } from "@/lib/timeWindows";
-import { validateDraft } from "@/lib/validation";
-import type { TradeDraft } from "@/types/trade";
-import { SubmitButton } from "@/components/ui/SubmitButton";
-import styles from "./TradeSummary.module.css";
+import { getChecklist } from '@/config/checklists';
+import { windowLabelAt } from '@/lib/timeWindows';
+import { validateDraft } from '@/lib/validation';
+import type { TradeDraft } from '@/types/trade';
+import { SubmitButton } from '@/components/ui/SubmitButton';
+import styles from './TradeSummary.module.css';
 
 const REQUIRED_KEYS = [
-  "date",
-  "time",
-  "symbol",
-  "setup",
-  "session",
-  "timeWindow",
-  "cycle",
-  "direction",
-  "outcome",
+  'date',
+  'time',
+  'symbol',
+  'setup',
+  'session',
+  'timeWindow',
+  'cycle',
+  'direction',
+  'outcome',
 ] as const;
 
 interface TradeSummaryProps {
@@ -25,29 +25,26 @@ interface TradeSummaryProps {
 /** Live recap of the trade being built, readiness progress and (on wide screens) the submit button. Footer of the result card. */
 export function TradeSummary({ draft, submitting }: TradeSummaryProps) {
   const errors = validateDraft(draft);
-  const missing = REQUIRED_KEYS.filter(
-    (key) => errors[key] || (key === "outcome" && errors.tpEntries),
-  ).length;
+  const missing = REQUIRED_KEYS.filter((key) => errors[key] || (key === 'outcome' && errors.tpR)).length;
   const done = REQUIRED_KEYS.length - missing;
   const checklistTotal = draft.setup ? getChecklist(draft.setup).length : 0;
 
-  type Chip = { label: string; tone?: "positive" | "negative" };
+  type Chip = { label: string; tone?: 'positive' | 'negative' };
   const chips: Chip[] = [];
   if (draft.symbol) chips.push({ label: draft.symbol });
   if (draft.setup) chips.push({ label: draft.setup });
   if (draft.session) chips.push({ label: draft.session });
-  if (draft.timeWindow)
-    chips.push({ label: windowLabelAt(draft.timeWindow, draft.utcOffset) });
+  if (draft.timeWindow) chips.push({ label: windowLabelAt(draft.timeWindow, draft.utcOffset) });
   if (draft.cycle) chips.push({ label: draft.cycle });
   if (draft.direction)
     chips.push({
       label: draft.direction,
-      tone: draft.direction === "Buy" ? "positive" : "negative",
+      tone: draft.direction === 'Buy' ? 'positive' : 'negative',
     });
   if (draft.outcome)
     chips.push({
       label: draft.outcome,
-      tone: draft.outcome === "TP" ? "positive" : "negative",
+      tone: draft.outcome === 'TP' ? 'positive' : 'negative',
     });
 
   return (
@@ -66,10 +63,7 @@ export function TradeSummary({ draft, submitting }: TradeSummaryProps) {
           aria-valuemax={REQUIRED_KEYS.length}
           aria-valuenow={done}
         >
-          <div
-            className={styles.fill}
-            style={{ inlineSize: `${(done / REQUIRED_KEYS.length) * 100}%` }}
-          />
+          <div className={styles.fill} style={{ inlineSize: `${(done / REQUIRED_KEYS.length) * 100}%` }} />
         </div>
       </div>
 
@@ -82,14 +76,12 @@ export function TradeSummary({ draft, submitting }: TradeSummaryProps) {
           ))}
         </ul>
       ) : (
-        <p className={styles.empty}>
-          با پر کردن فرم، خلاصه‌ی معامله اینجا نمایش داده می‌شود.
-        </p>
+        <p className={styles.empty}>با پر کردن فرم، خلاصه‌ی معامله اینجا نمایش داده می‌شود.</p>
       )}
 
       {draft.setup && (
         <p className={styles.line}>
-          چک‌لیست <bdi dir="ltr">{draft.setup}</bdi>:{" "}
+          چک‌لیست <bdi dir="ltr">{draft.setup}</bdi>:{' '}
           <bdi dir="ltr">
             {draft.checklist.length}/{checklistTotal}
           </bdi>

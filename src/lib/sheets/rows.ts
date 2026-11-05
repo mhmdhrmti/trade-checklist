@@ -1,12 +1,10 @@
 import { getChecklist } from '@/config/checklists';
-import { MAX_TP_ENTRIES, type SetupId } from '@/config/options';
+import type { SetupId } from '@/config/options';
 import type { TradePayload } from '@/types/trade';
 import { formatOffset, toUtc } from '../time';
 import { windowLabelAt } from '../timeWindows';
 
 export type Cell = string | number;
-
-const tpHeaders = Array.from({ length: MAX_TP_ENTRIES }, (_, i) => `TP${i + 1} (R)`);
 
 const LEADING_HEADERS = [
   'Date',
@@ -21,7 +19,7 @@ const LEADING_HEADERS = [
   'Cycle',
   'Direction',
   'Outcome',
-  ...tpHeaders,
+  'TP (R)',
 ];
 
 const TRAILING_HEADERS = ['Notes', 'Logged At (UTC)'];
@@ -46,7 +44,6 @@ export function asText(value: string): string {
 export function buildRow(payload: TradePayload, now: Date = new Date()): Cell[] {
   const utc = toUtc(payload.date, payload.time, payload.utcOffsetMinutes);
   const checked = new Set(payload.checklist);
-  const tp: Cell[] = Array.from({ length: MAX_TP_ENTRIES }, (_, i) => payload.tpEntries[i] ?? '');
   const loggedAt = now.toISOString().slice(0, 19).replace('T', ' ');
 
   return [
@@ -62,7 +59,7 @@ export function buildRow(payload: TradePayload, now: Date = new Date()): Cell[] 
     asText(payload.cycle),
     asText(payload.direction),
     asText(payload.outcome),
-    ...tp,
+    payload.tpR ?? '',
     ...getChecklist(payload.setup).map((item) => (checked.has(item.id) ? '✓' : '✗')),
     asText(payload.notes),
     loggedAt,

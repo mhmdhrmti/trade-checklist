@@ -18,16 +18,15 @@ export type DraftErrors = Partial<
     | 'cycle'
     | 'direction'
     | 'outcome'
-    | 'tpEntries',
+    | 'tpR',
     string
   >
 >;
 
-/** Parses the R inputs of a TP outcome; `null` if any is missing or not a positive number. */
-export function parseTpEntries(entries: readonly string[]): number[] | null {
-  if (entries.length === 0) return null;
-  const parsed = entries.map(parseDecimal);
-  return parsed.every((n): n is number => n !== null && n > 0 && n <= MAX_R_VALUE) ? parsed : null;
+/** Parses the R input of a TP outcome; `null` if it is missing or not a positive number. */
+export function parseTpR(raw: string): number | null {
+  const value = parseDecimal(raw);
+  return value !== null && value > 0 && value <= MAX_R_VALUE ? value : null;
 }
 
 /** Client-side validation. Every field is mandatory except notes. */
@@ -46,8 +45,8 @@ export function validateDraft(draft: TradeDraft): DraftErrors {
   if (!draft.cycle) errors.cycle = 'Cycle را انتخاب کن';
   if (!draft.direction) errors.direction = 'جهت معامله را انتخاب کن';
   if (!draft.outcome) errors.outcome = 'نتیجه‌ی معامله را مشخص کن';
-  else if (draft.outcome === 'TP' && !parseTpEntries(draft.tpEntries)) {
-    errors.tpEntries = 'مقدار R هر ورود را به‌صورت عدد مثبت وارد کن';
+  else if (draft.outcome === 'TP' && parseTpR(draft.tpR) === null) {
+    errors.tpR = 'مقدار R را به‌صورت عدد مثبت وارد کن';
   }
 
   return errors;
@@ -71,7 +70,7 @@ export function toPayload(draft: TradeDraft): TradePayload | null {
     cycle,
     direction,
     outcome,
-    tpEntries: outcome === 'TP' ? (parseTpEntries(draft.tpEntries) ?? []) : [],
+    tpR: outcome === 'TP' ? parseTpR(draft.tpR) : null,
     notes: draft.notes.trim(),
   };
 }

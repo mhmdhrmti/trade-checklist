@@ -17,8 +17,8 @@ export interface TradeDraft {
   cycle: Cycle | null;
   direction: Direction | null;
   outcome: Outcome | null;
-  /** Raw R inputs for TP outcomes (strings so half-typed values survive). 1–3 entries. */
-  tpEntries: string[];
+  /** Raw R multiple of the single TP (string so half-typed values survive). Only used for TP outcomes. */
+  tpR: string;
   notes: string;
 }
 
@@ -37,17 +37,13 @@ export interface TradePayload {
   cycle: Cycle;
   direction: Direction;
   outcome: Outcome;
-  /** R multiples of each TP entry; empty for SL. */
-  tpEntries: number[];
+  /** R multiple of the take profit; `null` for SL. */
+  tpR: number | null;
   notes: string;
 }
 
 /** Error codes returned by the API; the client maps them to Persian messages. */
 export type ApiErrorCode =
-  | 'invalid_payload'
-  | 'sheets_not_configured'
-  | 'sheets_forbidden'
-  | 'sheets_not_found'
-  | 'sheets_error';
+  'invalid_payload' | 'sheets_not_configured' | 'sheets_forbidden' | 'sheets_not_found' | 'sheets_error';
 
 export type ApiResponse = { ok: true } | { ok: false; error: ApiErrorCode };

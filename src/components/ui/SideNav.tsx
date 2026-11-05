@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { NAV_ITEMS } from '@/config/navigation';
 import { BrandIcon, ChecklistIcon } from './icons';
+import { ResetButton } from './ResetButton';
 import styles from './AppShell.module.css';
 
 const ICONS = { checklist: ChecklistIcon } as const;
@@ -21,13 +22,21 @@ export function SideNav() {
           const Icon = ICONS[item.icon];
           const active = pathname === item.href;
           return (
-            <Link key={item.href} href={item.href} className={styles.navItem} aria-current={active ? 'page' : undefined}>
+            <Link
+              key={item.href}
+              href={item.href}
+              className={styles.navItem}
+              aria-current={active ? 'page' : undefined}
+            >
               <Icon width={22} height={22} />
               <span className={styles.navLabel}>{item.label}</span>
             </Link>
           );
         })}
       </nav>
+      <div className={styles.railActions}>
+        <ResetButton variant="rail" />
+      </div>
     </aside>
   );
 }
